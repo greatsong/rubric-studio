@@ -106,7 +106,7 @@ export const useRubricStore = create<RubricStore>((set, get) => ({
         })
     })),
 
-    mode: 'learning',
+    mode: 'evaluation',
     setMode: (mode) => set({ mode }),
 
     simulation: {

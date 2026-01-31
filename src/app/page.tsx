@@ -2,6 +2,7 @@
 
 import { useRubricStore } from '@/store/rubricStore'
 import SimulatorPane from '@/components/simulator/SimulatorPane'
+import EvaluatorPane from '@/components/evaluator/EvaluatorPane'
 import CoachPane from '@/components/coach/CoachPane'
 import clsx from 'clsx'
 
@@ -15,9 +16,9 @@ export default function Home() {
       {/* Top Navigation Bar */}
       <header className="flex-shrink-0 bg-white border-b border-gray-200 px-6 py-2 flex items-center justify-between shadow-sm z-20">
         <div className="flex items-center gap-6">
-          <h1 className="text-xl font-bold text-slate-800 tracking-tight">Rubric Studio</h1>
+          <h1 className="text-xl font-bold text-slate-800 tracking-tight">AI Chatting Reader</h1>
           <nav className="flex bg-slate-100 p-1 rounded-lg">
-            {(['learning', 'evaluation', 'management', 'deployment'] as const).map((m) => (
+            {(['evaluation', 'learning', 'management', 'deployment'] as const).map((m) => (
               <button
                 key={m}
                 onClick={() => setMode(m)}
@@ -28,13 +29,14 @@ export default function Home() {
                     : "text-slate-500 hover:text-slate-700 hover:bg-slate-200/50"
                 )}
               >
-                {m.charAt(0).toUpperCase() + m.slice(1)} Mode
+                {/* Rename modes for clarity */}
+                {m === 'learning' ? 'Rubric Studio' : (m.charAt(0).toUpperCase() + m.slice(1))}
               </button>
             ))}
           </nav>
         </div>
         <div className="text-xs text-slate-400">
-          v0.2.1 (Multi-Rubric Support)
+          v1.0.0 (Reader Integrated)
         </div>
       </header>
 
@@ -53,12 +55,7 @@ export default function Home() {
         )}
 
         {mode === 'evaluation' && (
-          <div className="w-full h-full p-6 bg-slate-50 flex justify-center">
-            <div className="w-full max-w-5xl h-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              {/* Reusing SimulatorPane for now as it handles evaluation */}
-              <SimulatorPane />
-            </div>
-          </div>
+          <EvaluatorPane />
         )}
 
         {mode === 'management' && (
