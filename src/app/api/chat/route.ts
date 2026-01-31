@@ -55,7 +55,8 @@ ${JSON.stringify(rubric, null, 2)}
                         })).optional()
                     })).describe('List of criteria to update or add. Existing IDs will update, missing IDs will create new.')
                 }),
-                execute: async ({ criteria }: { criteria: ToolCriteria[] }) => {
+                // @ts-ignore
+                execute: async ({ criteria }) => {
                     // In a real server-side execution, we might save to DB here.
                     // Since we are using client-side state (Zustand), we return the intent
                     // and let the client intercept the tool invocation result to update the store.
@@ -71,12 +72,13 @@ ${JSON.stringify(rubric, null, 2)}
                         content: z.string().describe('The message content')
                     })).describe('The full conversation history to be simulated.')
                 }),
-                execute: async ({ scenario_title, chat_log }: ToolScenario) => {
+                // @ts-ignore
+                execute: async ({ scenario_title, chat_log }) => {
                     return { message: 'Scenario generated and loaded into simulator', scenario_title, chat_log_length: chat_log.length, chat_log }
                 }
             })
         },
     })
 
-    return result.toDataStreamResponse()
+    return result.toTextStreamResponse()
 }

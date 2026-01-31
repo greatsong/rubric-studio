@@ -1,6 +1,6 @@
 import puppeteerCore, { Browser } from 'puppeteer-core';
 import chromium from '@sparticuz/chromium'; // This will be used in Vercel
-import puppeteerExtra from 'puppeteer-extra';
+import { addExtra } from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 
 // We need to conditionally load the full puppeteer in local development
@@ -20,7 +20,6 @@ export async function getBrowser(): Promise<Browser> {
 
         // We utilize puppeteer-extra's addExtra to wrap puppeteer-core
         // This allows us to use stealth plugin with core.
-        const { addExtra } = puppeteerExtra;
 
         // Explicitly casting to avoid type mismatch if versions drift slightly
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,10 +30,9 @@ export async function getBrowser(): Promise<Browser> {
 
         return puppeteer.launch({
             args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
-            defaultViewport: chromium.defaultViewport,
+            defaultViewport: { width: 1920, height: 1080 },
             executablePath,
-            headless: chromium.headless,
-            ignoreHTTPSErrors: true,
+            headless: true,
         }) as unknown as Promise<Browser>;
     } else {
         // ---------------------------------------------------------
@@ -44,9 +42,7 @@ export async function getBrowser(): Promise<Browser> {
 
         try {
             // Dynamic import to prevent 'puppeteer' from being included in the production bundle
-            // @ts-expect-error - puppeteer is a devDependency, might not be resolvable in all checks
             const { default: puppeteerFull } = await import('puppeteer');
-            const { addExtra } = puppeteerExtra;
 
             const puppeteer = addExtra(puppeteerFull);
             puppeteer.use(StealthPlugin());
